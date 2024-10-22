@@ -3,44 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Social Network</title>
+  <meta name="theme-color" content="#ffffff">
+  <title>Social Network PWA</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <script defer src="script.js"></script>
+  <link rel="icon" href="icon-192x192.png" sizes="192x192">
 </head>
 <body>
   <header>
-    <h1>My Social Network</h1>
-    <nav>
-      <button id="profile">Profile</button>
-      <button id="communities">Communities</button>
-      <button id="logout">Logout</button>
-    </nav>
+    <h1>Welcome to the Social Network</h1>
+    <button id="installBtn" style="display:none;">Install App</button>
   </header>
-  
-  <section id="feed">
-    <h2>Feed</h2>
-    <div id="posts"></div>
+
+  <main>
+    <section id="posts"></section>
     <textarea id="newPost" placeholder="What's on your mind?"></textarea>
-    <input type="file" id="fileInput" accept="image/*,video/*">
+    <input type="file" id="fileInput" accept="image/*, video/*">
     <button id="postButton">Post</button>
-  </section>
+  </main>
 
-  <section id="profileSection" style="display:none;">
-    <h2>User Profile</h2>
-    <div id="profileInfo">
-      <img id="profilePic" src="" alt="Profile Picture">
-      <h3 id="username"></h3>
-      <p id="bio"></p>
-      <h4>Posts</h4>
-      <div id="userPosts"></div>
-    </div>
-  </section>
+  <footer>
+    <p>© 2024 Social Network PWA</p>
+  </footer>
 
-  <section id="communitySection" style="display:none;">
-    <h2>Communities</h2>
-    <button id="createCommunity">Create Community</button>
-    <div id="communityList"></div>
-  </section>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(function(reg) {
+          console.log('Service Worker Registered', reg);
+        });
+    }
 
-  <script src="script.js"></script>
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'block';
+
+      installBtn.addEventListener('click', () => {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the A2HS prompt');
+          } else {
+            console.log('User dismissed the A2HS prompt');
+          }
+          deferredPrompt = null;
+        });
+      });
+    });
+
+    window.addEventListener('appinstalled', () => {
+      console.log('PWA installed');
+    });
+  </script>
 </body>
 </html>
