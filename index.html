@@ -1,64 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#ffffff">
-  <title>Social Network PWA</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
-  <script defer src="script.js"></script>
-  <link rel="icon" href="icon-192x192.png" sizes="192x192">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenWave - Login</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>Welcome to the Social Network</h1>
-    <button id="installBtn" style="display:none;">Install App</button>
-  </header>
+    <div class="login-container">
+        <h1>Login to OpenWave</h1>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p id="error"></p>
+    </div>
 
-  <main>
-    <section id="posts"></section>
-    <textarea id="newPost" placeholder="What's on your mind?"></textarea>
-    <input type="file" id="fileInput" accept="image/*, video/*">
-    <button id="postButton">Post</button>
-  </main>
-
-  <footer>
-    <p>© 2024 Social Network PWA</p>
-  </footer>
-
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
-        .then(function(reg) {
-          console.log('Service Worker Registered', reg);
-        });
-    }
-
-    let deferredPrompt;
-    const installBtn = document.getElementById('installBtn');
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      installBtn.style.display = 'block';
-
-      installBtn.addEventListener('click', () => {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the A2HS prompt');
-          } else {
-            console.log('User dismissed the A2HS prompt');
-          }
-          deferredPrompt = null;
-        });
-      });
-    });
-
-    window.addEventListener('appinstalled', () => {
-      console.log('PWA installed');
-    });
-  </script>
+    <script src="scripts.js"></script>
 </body>
 </html>
