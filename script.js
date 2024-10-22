@@ -1,59 +1,38 @@
-const postButton = document.getElementById('postButton');
-const postsDiv = document.getElementById('posts');
-const newPostText = document.getElementById('newPost');
-const fileInput = document.getElementById('fileInput');
-
-let posts = [];
-
-// Function to load posts
-function loadPosts() {
-  fetch('https://script.google.com/macros/s/AKfycbwAcrBWl29WaVvjNC-7_WlImobENMWSCgrjGmPjvnu8PzU1VOvbZWl455rnA5TdApqO/exec')
-    .then(response => response.json())
-    .then(data => {
-      posts = data.posts;
-      renderPosts();
-    });
+function login() {
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
+    
+    google.script.run.withSuccessHandler(function(response) {
+        if (response.success) {
+            window.location.href = "feed.html";
+        } else {
+            document.getElementById('error').innerText = "Invalid login.";
+        }
+    }).authenticateUser(username, password);
 }
 
-// Function to render posts
-function renderPosts() {
-  postsDiv.innerHTML = '';
-  posts.forEach(post => {
-    const postDiv = document.createElement('div');
-    postDiv.classList.add('post');
-    postDiv.innerHTML = `
-      <p>${post.username}</p>
-      <p>${post.text}</p>
-      ${post.media ? `<img src="${post.media}" alt="Media">` : ''}
-      <p>Time Left: ${post.timeLeft}h</p>
-      <button>Aplaudir</button>
-    `;
-    postsDiv.appendChild(postDiv);
-  });
+function loadFeed() {
+    google.script.run.withSuccessHandler(function(posts) {
+        var feedContainer = document.getElementById('feed');
+        feedContainer.innerHTML = '';  // Limpar o feed
+        
+        posts.forEach(function(post) {
+            var postElement = document.createElement('div');
+            postElement.classList.add('post');
+            postElement.innerHTML = `<p>${post.username}</p><p>${post.content}</p><p>${post.timestamp}</p>`;
+            feedContainer.appendChild(postElement);
+        });
+    }).getPosts();
 }
 
-// Function to post new content
-postButton.addEventListener('click', () => {
-  const text = newPostText.value;
-  const file = fileInput.files[0];
+function createPost() {
+    var content = prompt("Enter your post content:");
+    var media_url = "";  // Código para upload de mídia aqui
 
-  if (text || file) {
-    const formData = new FormData();
-    formData.append('text', text);
-    if (file) {
-      formData.append('file', file);
-    }
-    fetch('https://script.google.com/macros/s/AKfycbwAcrBWl29WaVvjNC-7_WlImobENMWSCgrjGmPjvnu8PzU1VOvbZWl455rnA5TdApqO/exec', {
-      method: 'POST',
-      body: formData,
-    }).then(response => response.json())
-      .then(data => {
-        newPostText.value = '';
-        fileInput.value = '';
-        loadPosts();
-      });
-  }
-});
-
-// Load posts on page load
-loadPosts();
+    google.script.run.withSuccessHandler(function(response) {
+        if (response.success) {
+            alert("Post created!");
+            loadFeed();  // Recarrega o feed
+        }
+    }).createPost(USER_ID, content, media_url);
+}
