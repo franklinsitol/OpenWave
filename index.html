@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Network</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>My Social Network</h1>
+    <nav>
+      <button id="profile">Profile</button>
+      <button id="communities">Communities</button>
+      <button id="logout">Logout</button>
+    </nav>
+  </header>
+  
+  <section id="feed">
+    <h2>Feed</h2>
+    <div id="posts"></div>
+    <textarea id="newPost" placeholder="What's on your mind?"></textarea>
+    <input type="file" id="fileInput" accept="image/*,video/*">
+    <button id="postButton">Post</button>
+  </section>
+
+  <section id="profileSection" style="display:none;">
+    <h2>User Profile</h2>
+    <div id="profileInfo">
+      <img id="profilePic" src="" alt="Profile Picture">
+      <h3 id="username"></h3>
+      <p id="bio"></p>
+      <h4>Posts</h4>
+      <div id="userPosts"></div>
+    </div>
+  </section>
+
+  <section id="communitySection" style="display:none;">
+    <h2>Communities</h2>
+    <button id="createCommunity">Create Community</button>
+    <div id="communityList"></div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
