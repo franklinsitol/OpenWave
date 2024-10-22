@@ -72,6 +72,7 @@
             });
 
             const result = await response.json();
+            console.log('Login Result:', result); // Log do resultado do login
 
             if (result.success) {
                 alert('Login bem-sucedido!'); // Aqui você pode redirecionar ou salvar o usuário logado
@@ -102,6 +103,7 @@
             });
 
             const result = await response.json();
+            console.log('Register Result:', result); // Log do resultado do registro
 
             if (result.success) {
                 alert('Registro bem-sucedido!');
